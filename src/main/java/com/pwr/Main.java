@@ -16,7 +16,7 @@ public class Main {
         {
             Scanner scanner = new Scanner(System.in);
             game.showMap();
-            System.out.println("Player 1(X). Type your sign:");
+            System.out.println("Player 1(X). Type your symbol:");
             String type = scanner.nextLine();
             game.makeMove(type);
             result = game.showResultOfGame(type);

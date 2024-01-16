@@ -1,79 +1,211 @@
 package com.pwr.server;
 
+import com.pwr.client.ClientHandler;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
+
 
 public class Server {
-    public static void main(String[] args) {
-        try( ServerSocket serverSocket = new ServerSocket(1234);) {
-            System.out.println("Server started");
-            while(true)
-            {
-                try(Socket clientSocket = serverSocket.accept();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));)
-                {
-                    System.out.println("Client connected");
-                    String message = bufferedReader.readLine();
-                    String answer = String.format("Hello, got your message! = %s", message);
-                    bufferedWriter.write(answer);
-                    bufferedWriter.newLine();
-                    bufferedWriter.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private String[][] map;
+    private ServerSocket serverSocket;
+    //private List<Participant> participants = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
+    private List<Watcher> watchers = new ArrayList<>();
+    public Server(ServerSocket serverSocket)
+    {
+        this.serverSocket = serverSocket;
+    }
 
-        }
-            /*
-            while (true)
-            {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Client accepted ");
-//                //clientSocket.getOutputStream().write("abc".getBytes());
-//                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(clientSocket.getOutputStream());
-//                outputStreamWriter.write("Hello Client from Server!");
-//                outputStreamWriter.flush();//gwarancuje ze wiadomosc zostanie wyslana
-//                outputStreamWriter.close();
-
-                Scanner in = new Scanner(clientSocket.getInputStream());
-                while(in.hasNext())
-                {
-                    System.out.println(in.nextLine());
-                }
-                in.close();
-                //clientSocket.close();
-            }
-
-            //serverSocket.close();
-            */
+    public static void main(String[] args)
+    {
+        try {
+            ServerSocket serverSocket = new ServerSocket(1234);
+            Server server = new Server(serverSocket);
+            server.startServer();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-    }
-    private String[][] map;
-    public Server()
-    {
-        this.map = createMap();
-        playGame();
+
+//        try( ServerSocket serverSocket = new ServerSocket(1234);) {
+//            System.out.println("Server started");
+//            while(true)
+//            {
+//                try(Socket clientSocket = serverSocket.accept();
+//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));)
+//                {
+//                    System.out.println("Client connected");
+//                    String message = bufferedReader.readLine();
+//                    String answer = String.format("Hello, got your message! = %s", message);
+//                    bufferedWriter.write(answer);
+//                    bufferedWriter.newLine();
+//                    bufferedWriter.flush();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//        }
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
     }
 
-    public String[][] createMap()
+    public void startServer()
     {
-        map = new String[3][3];
+        try{
+            while(!serverSocket.isClosed())
+            {
+                Socket socket = serverSocket.accept();
+                System.out.println("A new client has connected");
+                ClientHandler clientHandler = new ClientHandler(socket);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String name = reader.readLine();
+                Thread thread = new Thread(clientHandler);
+                thread.start();
+                if(players.size() < 2)
+                {
+                    //mozliwe zrobic ze jak players.size == 0; String token =
+                    addToPlayersList(name);
+                }
+                else {
+                    watchers.add(new Watcher(name,"Watcher"));
+                }
+
+                //CZASOWE
+                System.out.println("Actual members of session:");
+                for(Player player: players)
+                {
+                    System.out.println(player.toString());
+                }
+                for(Watcher watcher: watchers)
+                {
+                    System.out.println(watcher.toString());
+                }
+
+            }
+        }catch(IOException e)
+        {
+            closeServerSocket();
+        }
+    }
+
+
+    public void closeServerSocket()
+    {
+        try {
+            if(serverSocket != null)
+                serverSocket.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void createMap()
+    {
+        map = new String[][] { {"0", "1", "2"},
+                {"3", "4", "5"},
+                {"6", "7", "8"}
+        };
+        System.out.println("Map was successfully created!");
+    }
+
+    public void showMap()
+    {
+        System.out.println("-------------");
         for(int i = 0; i < map.length; i++)
         {
-            Arrays.fill(map[i], "0");
+            for(int j = 0; j < map.length; j++)
+            {
+                System.out.print("| "+ map[i][j] + " ");
+            }
+            System.out.println("|");
+            System.out.println("|-----------|");
         }
-        return map;
     }
 
-    public boolean checkCombination(String type)
+
+    public void addToPlayersList(String name)
     {
-        //sprawdzamy kombinacje w linijke czyli XXX
+        Player player = new Player(name);
+        player.setNumberOfWinGames("0");
+        player.setNumberOfDrawGames("0");
+        player.setNumberOfLooseGames("0");
+        players.add(player);
+    }
+
+    public int makeMove(String type)
+    {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter slot number on which you want to make your move:");
+        int move = scanner.nextInt();
+        try{
+            if(move > -1 && move < 9)
+            {
+                System.out.println("You chosen slot with number: " + move);
+                String moveString = String.valueOf(move);
+                for(int i = 0; i < map.length; i++)
+                {
+                    for(int j = 0; j < map[i].length; j++)
+                    {
+                        if(map[i][j].equals(moveString))
+                        {
+                            map[i][j] = type;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e)
+        {
+            System.out.println("ERROR!Invalid input,please re-enter slot number");
+            makeMove(type);
+        }
+        return move;
+    }
+
+    public String showResultOfGame(String type)
+    {
+        //Checking maybe somebody wins(X or O)
+        if(checkCombination(type))
+        {
+            System.out.println("Game over!" + type + "wins");
+            //System.out.println("Game over!");
+            return "over";
+        }
+        //Checking maybe game is draw or not completed
+        else {
+            //Checking does map have any numbers
+            int numberCounter = 0;
+            for(int i = 0; i < map.length; i++)
+            {
+                for(int j = 0; j < map[i].length; j++) {
+                    if (!map[i][j].equals("X") || !map[i][j].equals("O")) {
+                        numberCounter++;
+                    }
+                }
+            }
+            if(numberCounter == 0)
+            {
+                System.out.println("Draw!The map don't have free slots for move");
+                return "draw";
+            }
+            else {
+                System.out.println("Let's make a next moves, cause game has free slots");
+                return "next";
+            }
+        }
+    }
+
+    private boolean checkCombination(String type)
+    {
+        //Calkowita liczba kombinacji = 3+3+2 =8
+        //sprawdzamy kombinacje w linijke
         for(int i = 0; i < map.length; i++)
         {
             int j = 0;
@@ -92,27 +224,12 @@ public class Server {
             }
         }
 
-        //sprawdzamy kombinacje na X
+        //sprawdzamy kombinacje na diagonal
         if(map[0][0].equals(type) && map[1][1].equals(type) && map[2][2].equals(type) || map[2][0].equals(type) && map[1][1].equals(type) && map[0][2].equals(type))
         {
             return true;
         }
-
         return false;
     }
 
-    public void playGame()
-    {
-        map[0][0] = "X";
-        map[1][1] = "X";
-        map[2][2] = "X";
-//        boolean result = checkCombination("X");
-        if(true == checkCombination("X"))
-        {
-            System.out.println("GAME OVER! X WINS");
-        }
-        else {
-            System.out.println("Continue game, next step:");
-        }
-    }
 }

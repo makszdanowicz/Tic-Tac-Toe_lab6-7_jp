@@ -79,13 +79,16 @@ public class TicTacToeGame {
         //Checking maybe somebody wins(X or O)
         if(checkCombination(type))
         {
-            //System.out.println("Game over!" + type + "wins");
-            System.out.println("Game over!");
+            System.out.println("Game over!" + type + "wins");
+            /*
+            * TRZEBA BEDZIE ZEBY JESZCZE PO PO TYM DO SERVERU ZAPISYWALA SIE STATYSTYKA GRACZY
+            * */
+            //System.out.println("Game over!");
             return "over";
         }
         //Checking maybe game is draw or not completed
         else {
-            //Checking does map have any numbers
+            //Checking does map have any free slots
             int numberCounter = 0;
             for(int i = 0; i < map.length; i++)
             {
