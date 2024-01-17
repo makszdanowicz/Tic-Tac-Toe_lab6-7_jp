@@ -27,7 +27,7 @@ public class Client {
     public void sendMessage(String message)
     {
         try {
-            bufferedWriter.write(clientUserName);
+            bufferedWriter.write(message);
             bufferedWriter.newLine();
             bufferedWriter.flush();
         }
@@ -41,7 +41,7 @@ public class Client {
     {
         try{
             String messageFromSession = bufferedReader.readLine();
-            System.out.println(messageFromSession);
+            System.out.println("Server: "+messageFromSession);
         }
         catch (IOException e)
         {
@@ -68,6 +68,7 @@ public class Client {
         scanner = new Scanner(System.in);
         System.out.println("Enter the role, that you want to be(player or watcher): ");
         String role = scanner.nextLine();
+        client.sendMessage(role);
 
         //sent next requests
         while(true)
