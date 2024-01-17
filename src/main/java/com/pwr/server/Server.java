@@ -1,6 +1,5 @@
 package com.pwr.server;
 
-import com.pwr.client.ClientHandler;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -12,6 +11,7 @@ public class Server {
     private String[][] map;
     private ServerSocket serverSocket;
     //private List<Participant> participants = new ArrayList<>();
+    private ArrayList<ClientHandler> clients = new ArrayList<>();
     private List<Player> players = new ArrayList<>();
     private List<Watcher> watchers = new ArrayList<>();
     public Server(ServerSocket serverSocket)
@@ -67,13 +67,19 @@ public class Server {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String name = reader.readLine();
                 System.out.println(name);
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                writer.write(name + " you have connected succesfully to server!");
-                writer.newLine();
-                writer.flush();
-                String role = reader.readLine();
-                System.out.println(role);
-                System.out.println(name + " chosen " + role + " role" );
+                ClientHandler clientThread = new ClientHandler(socket,name);
+                clients.add(clientThread);
+                Thread thread = new Thread(clientThread);
+                thread.start();
+
+//                //to juz handler
+//                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//                writer.write(name + " you have connected successfully to server!");
+//                writer.newLine();
+//                writer.flush();
+
+
+                /*
                 if(players.size() < 2)
                 {
                     //mozliwe zrobic ze jak players.size == 0; String token =
@@ -93,9 +99,7 @@ public class Server {
                 {
                     System.out.println(watcher.toString());
                 }
-                ClientHandler clientHandler = new ClientHandler(socket,name);
-                Thread thread = new Thread(clientHandler);
-                thread.start();
+                 */
             }
         }catch(IOException e)
         {

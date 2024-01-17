@@ -1,12 +1,13 @@
-package com.pwr.client;
+package com.pwr.server;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientHandler implements Runnable{
 
-    public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    //public static ArrayList<com.pwr.client.ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
@@ -22,8 +23,8 @@ public class ClientHandler implements Runnable{
             this.clientUserName = name;
             //this.clientUserName = bufferedReader.readLine();
             //this.role = role;
-            clientHandlers.add(this);// this represents a ClientHandler object, so we sent information to array list
-            broadcastMessage("SERVER: " + clientUserName + "has entered a game session!");
+            //clientHandlers.add(this);// this represents a ClientHandler object, so we sent information to array list
+            //broadcastMessage("SERVER: " + clientUserName + "has entered a game session!");
         } catch (IOException e)
         {
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -32,9 +33,31 @@ public class ClientHandler implements Runnable{
     }
     @Override
     public void run() {
+        System.out.println("Thread started");
         try {
-            String messageFromSession = bufferedReader.readLine();
-            System.out.println(messageFromSession);
+            //sent a message that server got a name and return it with information that connection is good
+            bufferedWriter.write(clientUserName + " you have connected successfully to server!");
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+
+            //reading a role of person
+            String role = bufferedReader.readLine();
+            System.out.println(clientUserName + " have chosen " + role + " role" );
+
+            while (true)
+            {
+                String request = bufferedReader.readLine();
+                if(request.equals("exit") || request.equals("quit"))
+                {
+                    break;
+                }
+                System.out.println(clientUserName + " request was: " + request);
+
+            }
+            closeEverything(socket,bufferedReader,bufferedWriter);
+
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -42,10 +65,10 @@ public class ClientHandler implements Runnable{
     }
 
 
-
+    /*
     public void broadcastMessage(String message)
     {
-        for(ClientHandler clientHandler: clientHandlers)
+        for(com.pwr.client.ClientHandler clientHandler: clientHandlers)
         {
             try{
                 if(!clientHandler.clientUserName.equals(clientUserName))
@@ -61,15 +84,19 @@ public class ClientHandler implements Runnable{
         }
     }
 
+
+
     public void removeClientHandler()
     {
         clientHandlers.remove(this);
         broadcastMessage("SERVER: " + clientUserName + " has left the group session");
     }
 
+     */
+
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter)
     {
-        removeClientHandler();
+        //removeClientHandler();
         try{
             if(bufferedReader != null)
             {
@@ -92,3 +119,4 @@ public class ClientHandler implements Runnable{
 
 
 }
+
