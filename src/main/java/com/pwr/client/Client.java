@@ -9,35 +9,47 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUserName;
+    private String role;
 
-    public Client(Socket socket, String clientUserName)
+    public Client(Socket socket, String clientUserName, String role)
     {
         try {
             this.socket = socket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));//charecter stream, not a byte stream
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUserName = clientUserName;
+            this.role = role;
         }catch (IOException e)
         {
             closeEverything(socket,bufferedReader,bufferedWriter);
         }
     }
 
-    public void sendUserName()
+    public void sendMessage(String message)
     {
         try {
             bufferedWriter.write(clientUserName);
+            bufferedWriter.newLine();
             bufferedWriter.flush();
-
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            closeEverything(socket,bufferedReader,bufferedWriter);
         }
     }
 
     public void listenMessage()
     {
+        try{
+            String messageFromSession = bufferedReader.readLine();
+            System.out.println(messageFromSession);
+        }
+        catch (IOException e)
+        {
+            System.out.println("Closing");
+            closeEverything(socket,bufferedReader,bufferedWriter);
+        }
+        /*
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -56,6 +68,7 @@ public class Client {
                 }
             }
         }).start();
+         */
     }
 
 
@@ -64,9 +77,15 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your nick-name for game session: ");
         String userName = scanner.nextLine();
+        System.out.println("Enter the role, that you want to be: ");
+        String role = scanner.nextLine();
         Socket socket = new Socket("localhost",1234);
-        Client client = new Client(socket,userName);
-        client.sendUserName();
+        Client client = new Client(socket,userName,role);
+        client.sendMessage(userName);
+        //client.listenMessage();
+        String messageFromSession = client.bufferedReader.readLine();
+        System.out.println(messageFromSession);
+        client.sendMessage(role);
         //client.listenMessage();
 //        try (Socket clientSocket = new Socket("localhost",1234);
 //             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));

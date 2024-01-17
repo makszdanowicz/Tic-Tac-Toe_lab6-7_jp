@@ -11,14 +11,17 @@ public class ClientHandler implements Runnable{
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUserName;
+    private String role;
 
-    public ClientHandler(Socket socket)
+    public ClientHandler(Socket clientSocket,String name)
     {
         try{
-            this.socket = socket;
+            this.socket = clientSocket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));//charecter stream, not a byte stream
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUserName = bufferedReader.readLine();
+            this.clientUserName = name;
+            //this.clientUserName = bufferedReader.readLine();
+            //this.role = role;
             clientHandlers.add(this);// this represents a ClientHandler object, so we sent information to array list
             broadcastMessage("SERVER: " + clientUserName + "has entered a game session!");
         } catch (IOException e)
@@ -29,8 +32,16 @@ public class ClientHandler implements Runnable{
     }
     @Override
     public void run() {
+        try {
+            String messageFromSession = bufferedReader.readLine();
+            System.out.println(messageFromSession);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
+
+
 
     public void broadcastMessage(String message)
     {

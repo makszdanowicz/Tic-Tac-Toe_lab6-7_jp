@@ -63,11 +63,17 @@ public class Server {
             {
                 Socket socket = serverSocket.accept();
                 System.out.println("A new client has connected");
-                ClientHandler clientHandler = new ClientHandler(socket);
+//                ClientHandler clientHandler = new ClientHandler(socket);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String name = reader.readLine();
-                Thread thread = new Thread(clientHandler);
-                thread.start();
+                System.out.println(name);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                writer.write(name + " you have connected succesfully to server!");
+                writer.newLine();
+                writer.flush();
+                String role = reader.readLine();
+                System.out.println(role);
+                System.out.println(name + " chosen " + role + " role" );
                 if(players.size() < 2)
                 {
                     //mozliwe zrobic ze jak players.size == 0; String token =
@@ -87,7 +93,9 @@ public class Server {
                 {
                     System.out.println(watcher.toString());
                 }
-
+                ClientHandler clientHandler = new ClientHandler(socket,name);
+                Thread thread = new Thread(clientHandler);
+                thread.start();
             }
         }catch(IOException e)
         {
@@ -100,6 +108,7 @@ public class Server {
     {
         try {
             if(serverSocket != null)
+                System.out.println("Server closed");
                 serverSocket.close();
         } catch (IOException e)
         {
@@ -133,7 +142,7 @@ public class Server {
 
     public void addToPlayersList(String name)
     {
-        Player player = new Player(name);
+        Player player = new Player(name,"Player");
         player.setNumberOfWinGames("0");
         player.setNumberOfDrawGames("0");
         player.setNumberOfLooseGames("0");
