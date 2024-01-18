@@ -12,8 +12,6 @@ public class Server {
     private ServerSocket serverSocket;
     //private List<Participant> participants = new ArrayList<>();
     private ArrayList<ClientHandler> clients = new ArrayList<>();
-    private List<Player> players = new ArrayList<>();
-    private List<Watcher> watchers = new ArrayList<>();
     public Server(ServerSocket serverSocket)
     {
         this.serverSocket = serverSocket;
@@ -144,14 +142,7 @@ public class Server {
     }
 
 
-    public void addToPlayersList(String name)
-    {
-        Player player = new Player(name,"Player");
-        player.setNumberOfWinGames("0");
-        player.setNumberOfDrawGames("0");
-        player.setNumberOfLooseGames("0");
-        players.add(player);
-    }
+
 
     public int makeMove(String type)
     {

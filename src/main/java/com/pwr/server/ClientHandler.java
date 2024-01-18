@@ -12,6 +12,7 @@ public class ClientHandler implements Runnable{
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUserName;
+
     private String role;
 
     public ClientHandler(Socket clientSocket,String name)
@@ -43,7 +44,12 @@ public class ClientHandler implements Runnable{
             //reading a role of person
             String role = bufferedReader.readLine();
             System.out.println(clientUserName + " have chosen " + role + " role" );
+            if(role.equals("player"))
+            {
 
+            } else if (role.equals("watcher")) {
+
+            }
             while (true)
             {
                 String request = bufferedReader.readLine();
