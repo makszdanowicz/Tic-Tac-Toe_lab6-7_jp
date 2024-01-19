@@ -4,11 +4,16 @@ package com.pwr.server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.*;
 
 
 public class Server {
     private String[][] map;
+    public Registry registry;
+    public static int rmiPort = 1099;
+    public static int port = 1234;
     private ServerSocket serverSocket;
     //private List<Participant> participants = new ArrayList<>();
     private ArrayList<ClientHandler> clients = new ArrayList<>();
@@ -17,42 +22,24 @@ public class Server {
         this.serverSocket = serverSocket;
     }
 
-    public static void main(String[] args)
-    {
-        try {
-            ServerSocket serverSocket = new ServerSocket(1234);
-            Server server = new Server(serverSocket);
-            server.startServer();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-//        try( ServerSocket serverSocket = new ServerSocket(1234);) {
-//            System.out.println("Server started");
-//            while(true)
-//            {
-//                try(Socket clientSocket = serverSocket.accept();
-//                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));)
-//                {
-//                    System.out.println("Client connected");
-//                    String message = bufferedReader.readLine();
-//                    String answer = String.format("Hello, got your message! = %s", message);
-//                    bufferedWriter.write(answer);
-//                    bufferedWriter.newLine();
-//                    bufferedWriter.flush();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+//    public static void main(String[] args)
+//    {
+//        try {
+//            ServerSocket serverSocket = new ServerSocket(port);
+//            Server server = new Server(serverSocket);
 //
-//        }
+//            Player player = new Player();
+//            server.registry = LocateRegistry.createRegistry(rmiPort);
+//            server.registry.rebind("Player",player);
+//            //player.createGameRoom("AmdinRoom");
 //
+//            server.startServer();
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-
-    }
+//
+//
+//    }
 
     public void startServer()
     {
@@ -61,11 +48,10 @@ public class Server {
             {
                 Socket socket = serverSocket.accept();
                 System.out.println("A new client has connected");
-//                ClientHandler clientHandler = new ClientHandler(socket);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String name = reader.readLine();
-                System.out.println(name);
-                ClientHandler clientThread = new ClientHandler(socket,name);
+                String userToken = reader.readLine();
+                System.out.println(userToken);
+                ClientHandler clientThread = new ClientHandler(socket,userToken);
                 clients.add(clientThread);
                 Thread thread = new Thread(clientThread);
                 thread.start();
@@ -76,28 +62,6 @@ public class Server {
 //                writer.newLine();
 //                writer.flush();
 
-
-                /*
-                if(players.size() < 2)
-                {
-                    //mozliwe zrobic ze jak players.size == 0; String token =
-                    addToPlayersList(name);
-                }
-                else {
-                    watchers.add(new Watcher(name,"Watcher"));
-                }
-
-                //CZASOWE
-                System.out.println("Actual members of session:");
-                for(Player player: players)
-                {
-                    System.out.println(player.toString());
-                }
-                for(Watcher watcher: watchers)
-                {
-                    System.out.println(watcher.toString());
-                }
-                 */
             }
         }catch(IOException e)
         {

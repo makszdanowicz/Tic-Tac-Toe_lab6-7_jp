@@ -7,13 +7,7 @@ public class TicTacToeGame {
     private String[][] map;
 
     // To print out the board.
-    /* -------------
-       | 1 | 2 | 3 |
-       |-----------|
-       | 4 | 5 | 6 |
-       |-----------|
-       | 7 | 8 | 9 |
-       -------------
+    /*
 
        -------------
        | 0 | 1 | 2 |
@@ -30,7 +24,6 @@ public class TicTacToeGame {
                               {"6", "7", "8"}
        };
     }
-
     public void showMap()
     {
         System.out.println("-------------");
@@ -44,6 +37,9 @@ public class TicTacToeGame {
             System.out.println("|-----------|");
         }
     }
+
+
+
 
     public int makeMove(String type)
     {
@@ -80,15 +76,12 @@ public class TicTacToeGame {
         if(checkCombination(type))
         {
             System.out.println("Game over!" + type + "wins");
-            /*
-            * TRZEBA BEDZIE ZEBY JESZCZE PO PO TYM DO SERVERU ZAPISYWALA SIE STATYSTYKA GRACZY
-            * */
             //System.out.println("Game over!");
             return "over";
         }
         //Checking maybe game is draw or not completed
         else {
-            //Checking does map have any free slots
+            //Checking does map have any numbers
             int numberCounter = 0;
             for(int i = 0; i < map.length; i++)
             {

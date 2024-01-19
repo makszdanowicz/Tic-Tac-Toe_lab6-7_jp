@@ -11,18 +11,17 @@ public class ClientHandler implements Runnable{
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private String clientUserName;
+    private String clientTocken;
 
     private String role;
 
-    public ClientHandler(Socket clientSocket,String name)
+    public ClientHandler(Socket clientSocket,String clientTocken)
     {
         try{
             this.socket = clientSocket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));//charecter stream, not a byte stream
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUserName = name;
-            //this.clientUserName = bufferedReader.readLine();
+            this.clientTocken = clientTocken;
             //this.role = role;
             //clientHandlers.add(this);// this represents a ClientHandler object, so we sent information to array list
             //broadcastMessage("SERVER: " + clientUserName + "has entered a game session!");
@@ -35,6 +34,7 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         System.out.println("Thread started");
+        String clientUserName = clientTocken.substring(clientTocken.indexOf("@")+1);
         try {
             //sent a message that server got a name and return it with information that connection is good
             bufferedWriter.write(clientUserName + " you have connected successfully to server!");
@@ -44,14 +44,17 @@ public class ClientHandler implements Runnable{
             //reading a role of person
             String role = bufferedReader.readLine();
             System.out.println(clientUserName + " have chosen " + role + " role" );
-            if(role.equals("player"))
-            {
 
-            } else if (role.equals("watcher")) {
-
-            }
+//            if(role.equals("player"))
+//            {
+//
+//            } else if (role.equals("watcher")) {
+//
+//            }
             while (true)
             {
+                //TUTAJ JUZ WATCHER FEATURES I KOMUNIKACJA Z WATCHEREM
+                //DODAC IF Z PYTANIAMI
                 String request = bufferedReader.readLine();
                 if(request.equals("exit") || request.equals("quit"))
                 {
