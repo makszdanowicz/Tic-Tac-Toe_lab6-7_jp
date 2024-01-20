@@ -132,14 +132,36 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
         return room.getMap();
     }
 
-
     @Override
-    public int makeMove(String token, String roomToken, String playerType) throws RemoteException {
-        return 0;
+    public boolean turnStatus(String roomToken,String playerToken) throws RemoteException {
+        GameRoom room = gameRooms.get(roomToken);
+        if(room.getTokenOfTurnPlayer().equals(playerToken))
+        {
+            return true;
+        }
+        else return false;
     }
 
     @Override
-    public boolean checkCombination(String roomToken) throws RemoteException {
-        return false;
+    public int makeMove(String roomToken, String playerToken, String playerFigure, int moveNumber) throws RemoteException {
+        GameRoom room = gameRooms.get(roomToken);
+        int status = room.makeMove(playerToken,playerFigure,moveNumber);
+        /*
+        1 - EVERYTHING IS OKAY
+        0 - ON THIS POSITION FIGURE IS ALREADY
+        -1 - ERROR There is no slot with this number
+         */
+        return status;
+    }
+
+
+    @Override
+    public int checkCombination(String roomToken,String playerFigure) throws RemoteException {
+        GameRoom room = gameRooms.get(roomToken);
+        int result = room.checkCombination(playerFigure);
+        //1 - game over
+        //0 - draw
+        //2 - nextMove
+        return result;
     }
 }

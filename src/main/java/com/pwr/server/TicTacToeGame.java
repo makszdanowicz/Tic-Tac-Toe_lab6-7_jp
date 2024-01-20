@@ -50,43 +50,39 @@ public class TicTacToeGame {
 
 
 
-    public int makeMove(String type)
+    public int makeMove(String figure, int move)
     {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter slot number on which you want to make your move:");
-        int move = scanner.nextInt();
-        try{
-            if(move > -1 && move < 9)
-            {
-                System.out.println("You chosen slot with number: " + move);
-                String moveString = String.valueOf(move);
-                for(int i = 0; i < map.length; i++)
+        if(move > -1 && move < 9)
+        {
+            String moveString = String.valueOf(move);
+            for(int i = 0; i < map.length; i++)
                 {
                     for(int j = 0; j < map[i].length; j++)
                     {
                         if(map[i][j].equals(moveString))
                         {
-                            map[i][j] = type;
+                            map[i][j] = figure;
+                            return 1; //EVERYTHING IS OKAY
+                        }
+                        else if(map[i][j].equals("X") || map[i][j].equals("O"))
+                        {
+                            return 0; //ON THIS POSITION FIGURE IS ALREADY
                         }
                     }
                 }
-            }
-        } catch (Exception e)
-        {
-            System.out.println("ERROR!Invalid input,please re-enter slot number");
-            makeMove(type);
+
         }
-        return move;
+        return -1;//There is no slot with this number
     }
 
-    public String showResultOfGame(String type)
+    public int showResultOfGame(String type)
     {
         //Checking maybe somebody wins(X or O)
         if(checkCombination(type))
         {
             System.out.println("Game over!" + type + "wins");
             //System.out.println("Game over!");
-            return "over";
+            return 1;
         }
         //Checking maybe game is draw or not completed
         else {
@@ -103,11 +99,11 @@ public class TicTacToeGame {
             if(numberCounter == 0)
             {
                 System.out.println("Draw!The map don't have free slots for move");
-                return "draw";
+                return 0;
             }
             else {
                 System.out.println("Let's make a next moves, cause game has free slots");
-                return "next";
+                return 2;
             }
         }
     }

@@ -196,8 +196,96 @@ public class Client {
         System.out.println(".--------------------------------------------.");
         String[][] map = player.getMap(getConnectedRoomToken());
         showMap(map);
+        System.out.println();
+        boolean isYourTurn = player.turnStatus(getConnectedRoomToken(),getUserToken());
+        //X - first Turn
+        if(isYourTurn)
+        {
+            playGame(player,figure);
+        }
+        else {
+            System.out.println("Waiting for the opponent to make a move...");
+            while (!isYourTurn)
+            {
+                isYourTurn = player.turnStatus(getConnectedRoomToken(),getUserToken());
+            }
 
+        }
+        int resultOfCombination = player.checkCombination(getConnectedRoomToken(),figure);
+        //1 - game over
+        //0 - draw
+        //2 - nextMove
+        if(resultOfCombination == 1)
+        {
+            System.out.println("End of the game! " + figure + "won");
+        } else if (resultOfCombination == 0) {
+            System.out.println("End of the game!It's Draw!");
+        }
 
+//        else if (resultOfCombination == 2) {
+//            System.out.println("You don't have any combinations on map,be carefull and try to do them to win!");
+//            setTurnStatus(false);
+//        }
+
+        while(resultOfCombination == 2)
+        {
+            if(isYourTurn)
+            {
+                playGame(player,figure);
+                resultOfCombination = player.checkCombination(getConnectedRoomToken(),figure);
+                if(resultOfCombination == 1)
+                {
+                    System.out.println("End of the game! " + figure + "won");
+                    break;
+                } else if (resultOfCombination == 0) {
+                    System.out.println("End of the game!It's Draw!");
+                    break;
+                }
+            }
+        }
+        System.out.println("Would you like to play a new game or you want to leave from this room?");
+    }
+
+    private void playGame(PlayerFeaturesInterface player,String figure) throws RemoteException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Type the number in which you want enter a move:");
+        int number = scanner.nextInt();
+        int resultOfMove = player.makeMove(getConnectedRoomToken(),getUserToken(),figure,number);
+            /* RESULT OF MOVE
+              1 - EVERYTHING IS OKAY
+              0 - ON THIS POSITION FIGURE IS ALREADY
+             -1 - ERROR There is no slot with this number
+             */
+        if(resultOfMove == -1)
+        {
+            while(resultOfMove ==-1)
+            {
+                System.out.println("ERROR! Map don't have any slot with this number");
+                System.out.println("Please try again");
+                System.out.println("Type the number in which you want enter a move:");
+                number = scanner.nextInt();
+                resultOfMove = player.makeMove(getConnectedRoomToken(),getUserToken(),figure,number);
+            }
+        }
+        if(resultOfMove == 0) {
+            while(resultOfMove ==0)
+            {
+                System.out.println("On chosen position figure is already");
+                System.out.println("Please try another position");
+                System.out.println("Type the number in which you want enter a move:");
+                number = scanner.nextInt();
+                resultOfMove = player.makeMove(getConnectedRoomToken(),getUserToken(),figure,number);
+            }
+        }
+        if(resultOfMove == 1)
+        {
+            System.out.println("The position № " + number + "now is " + figure);
+            String[][] map = player.getMap(getConnectedRoomToken());
+            showMap(map);
+            System.out.println();
+        }
+        //SETTURNSTATUS -> FALSE
+        //SETOPPONNENT -> TRUE
     }
 
     private void showMap(String[][] map)

@@ -8,6 +8,7 @@ public class GameRoom {
     private String token;
     private HashMap<String, String> playersInfo;
     private TicTacToeGame game;
+    private String tokenOfTurnPlayer;
 
     public GameRoom(String name, String token)
     {
@@ -20,6 +21,15 @@ public class GameRoom {
     public String getName() {
         return name;
     }
+
+    public String getTokenOfTurnPlayer() {
+        return tokenOfTurnPlayer;
+    }
+
+    public void setTokenOfTurnPlayer(String tokenOfTurnPlayer) {
+        this.tokenOfTurnPlayer = tokenOfTurnPlayer;
+    }
+
     public int getPlayersNumber()
     {
         return playersInfo.size();
@@ -33,6 +43,7 @@ public class GameRoom {
         if(playersInfo.size() == 0)
         {
             playersInfo.put(playerToken,"X");
+            setTokenOfTurnPlayer(playerToken);//SET WHO WILL BE TURN FIRST, BY SENDING HIS TOKEN
         }
         else {
             playersInfo.put(playerToken,"O");
@@ -83,6 +94,44 @@ public class GameRoom {
     public String[][] getMap()
     {
         return game.getMap();
+    }
+
+    public void turnStatus(String playerToken)
+    {
+
+    }
+
+    public int makeMove(String playerToken, String playerFigure, int moveNumber)
+    {
+        int status = game.makeMove(playerFigure,moveNumber);
+        for(String player : playersInfo.keySet()){
+            if(!player.equals(playerToken)){
+                setTokenOfTurnPlayer(player);
+                break;
+            }
+        }
+        System.out.println("Player turn: " + getTokenOfTurnPlayer());
+        return status;
+    }
+
+    public int checkCombination(String playerFigure)
+    {
+        int result = game.showResultOfGame(playerFigure);
+        if(result == 1)
+        {
+            //End of game
+            return 1;
+        }
+        else if(result == 0)
+        {
+            //draw
+            return 0;
+        } else if (result == 2)
+        {
+            //nextMoves
+            return 2;
+        }
+        return -1;//error
     }
 
 
