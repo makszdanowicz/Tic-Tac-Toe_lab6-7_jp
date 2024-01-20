@@ -7,12 +7,14 @@ public class GameRoom {
     private String name;
     private String token;
     private HashMap<String, String> playersInfo;
+    private TicTacToeGame game;
 
     public GameRoom(String name, String token)
     {
         this.name = name;
         this.token = token;
         this.playersInfo = new HashMap<>();
+        this.game = new TicTacToeGame();
     }
 
     public String getName() {
@@ -77,6 +79,12 @@ public class GameRoom {
     {
         playersInfo.remove(playerToken);
     }
+
+    public String[][] getMap()
+    {
+        return game.getMap();
+    }
+
 
     @Override
     public String toString() {

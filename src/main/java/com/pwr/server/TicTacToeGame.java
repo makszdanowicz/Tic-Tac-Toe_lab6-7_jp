@@ -5,6 +5,10 @@ import java.util.SortedMap;
 
 public class TicTacToeGame {
     private String[][] map;
+    public TicTacToeGame()
+    {
+        createMap();
+    }
 
     // To print out the board.
     /*
@@ -24,6 +28,11 @@ public class TicTacToeGame {
                               {"6", "7", "8"}
        };
     }
+
+    public String[][] getMap() {
+        return map;
+    }
+
     public void showMap()
     {
         System.out.println("-------------");

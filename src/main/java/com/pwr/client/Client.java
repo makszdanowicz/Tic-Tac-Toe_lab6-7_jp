@@ -193,7 +193,25 @@ public class Client {
         String opponentToken = player.getTokenOfOpponent(getConnectedRoomToken(),getUserToken());
         System.out.println("Your figure is: " + figure);
         System.out.println("Your opponent is: " + opponentToken.substring(opponentToken.indexOf("@")+1));
-        
+        System.out.println(".--------------------------------------------.");
+        String[][] map = player.getMap(getConnectedRoomToken());
+        showMap(map);
+
+
+    }
+
+    private void showMap(String[][] map)
+    {
+        System.out.println("-------------");
+        for(int i = 0; i < map.length; i++)
+        {
+            for (int j = 0; j < map.length; j++)
+            {
+                System.out.print("| " + map[i][j] + " ");
+            }
+            System.out.println("|");
+            System.out.println("|-----------|");
+        }
     }
 
     public void leaveGameRoomPanel(PlayerFeaturesInterface player) throws RemoteException{

@@ -13,9 +13,9 @@ public interface PlayerFeaturesInterface extends Remote {
     int getNumberOfPlayersInRoom(String roomToken) throws RemoteException;
     String getTokenOfOpponent(String roomToken,String playerToken) throws RemoteException;
     String getFigureOfPlayer(String roomToken,String playerToken) throws RemoteException;
-
+    String[][] getMap(String roomToken) throws RemoteException;
     int makeMove(String token, String roomToken, String playerType) throws RemoteException;
     boolean checkCombination(String roomToken) throws RemoteException;
-    void showMap(String roomToken) throws RemoteException;
+
 
 }
