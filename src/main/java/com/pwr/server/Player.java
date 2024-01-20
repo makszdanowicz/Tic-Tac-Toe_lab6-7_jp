@@ -25,14 +25,28 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
             gameRooms.put(roomToken, new GameRoom(roomName,roomToken));
             //System.out.println("Your room named " + roomName + " was created!");
             //System.out.println("If u want to connect to this room use this token: " + roomToken);
-            return "Your room named " + roomName + " was created!\n" + "If u want to connect to this room use this token: " + roomToken;
+            return "The room named " + roomName + " was created!\n" + "If u want to connect to this room use this token: " + roomToken;
         }
 
     }
 
     @Override
     public String joinGameRoom(String playerToken, String roomToken) throws RemoteException {
-        return null;
+        for(String key : gameRooms.keySet())
+        {
+            if(key.equals(roomToken))
+            {
+                GameRoom room = gameRooms.get(roomToken);
+                int status = room.addNewPlayer(playerToken);
+                if(status == 0)
+                {
+                    return "You can't connect to this room, because lobby is full. Try again later or connect to other room.";
+                } else if (status == 1) {
+                    return "You have successfully connected to room " + roomToken.substring(roomToken.indexOf("@")+1) + "!";
+                }
+            }
+        }
+        return "ERROR!The room with provided token doesn't exit.Try again!";
     }
 
     @Override
@@ -52,7 +66,7 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
         for(Map.Entry<String,GameRoom> entry: gameRooms.entrySet())
         {
             //System.out.println("name: " + entry.getKey() + " | token: " + entry.getValue());
-            String string = "name" + entry.getValue().toString() + " | token: " + entry.getKey();
+            String string = "name: " + entry.getValue().getName() + " | number of player: " + entry.getValue().getPlayerNumber()+ " | token: " + entry.getKey();
             gameRoomsList.add(string);
         }
         return gameRoomsList;

@@ -20,6 +20,7 @@ public class Client {
     private BufferedWriter bufferedWriter;
     private String userToken;
     private String role;
+    private String connectedRoomToken;
 
     public Client(Socket socket,String userToken)
     {
@@ -42,76 +43,21 @@ public class Client {
         return bufferedWriter;
     }
 
-    //    public static void main(String[] args) throws IOException, NotBoundException {
-//        //Creating a client
-//
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Enter your nick-name for game session: ");
-//        String userName = scanner.nextLine();
-//        String userToken = UUID.randomUUID() + "@" + userName;
-//
-//        Registry registry = LocateRegistry.getRegistry("localhost",1099);
-//        PlayerFeaturesInterface player = (PlayerFeaturesInterface) registry.lookup("Player");
-//
-//        Socket socket = new Socket("localhost",1234);
-//        Client client = new Client(socket,userToken);
-//        client.sendMessage(userToken);
-//
-//        //Get message are we get connection to the server with our name
-//        client.listenMessage();
-//
-//        //sent role
-//        scanner = new Scanner(System.in);
-//        System.out.println("If u want to be a player pls type and send 'p'");
-//        System.out.println("If u want to be a watcher, pls type and send 'w'");
-//        System.out.println("Enter the role,that u want to be: ");
-//        String role = scanner.nextLine();
-//        client.sendMessage(role);
-//
-//        if(role.equals("p"))
-//        {
-//            System.out.println("You have chosen player mode");
-//            client.playerMenuPanel();
-//            Scanner scannerOption = new Scanner(System.in);
-//            String option = scannerOption.nextLine();
-//            while(!option.equals("5")) {
-//                switch (option) {
-//                    case "1":
-//                        client.createRoomPanel();
-//                        break;
-//                    case "2":
-//                        client.checkListOfRoomsPanel();
-//                        break;
-//                    case "3":
-//                        client.joinGameRoomPanel();
-//                        break;
-//                    case "4":
-//                        client.deleteGameRoomPanel();
-//                        break;
-//                    default:
-//                        System.out.println("There is not available option of number - " + option + ".Please enter a number of option from '1' to '5' to continue the program!");
-//                }
-//            }
-//        }
-//        else if(role.equals("w"))
-//        {
-//            System.out.println("You have chosen watcher mode");
-//        }
-//
-//        //sent next requests
-//        while(true)
-//        {
-//
-//            System.out.println("what u would like to do?(if 'exit' type it)");
-//            String request = scanner.nextLine();
-//            if(request.equals("exit") || request.equals("quit"))
-//            {
-//                break;
-//            }
-//            client.sendMessage(request);
-//        }
-//        client.closeEverything(socket,client.bufferedReader,client.bufferedWriter);
-//    }
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public String getConnectedRoomToken() {
+        return connectedRoomToken;
+    }
+
+    public void setConnectedRoomToken(String connectedRoomToken) {
+        this.connectedRoomToken = connectedRoomToken;
+    }
 
     public void sendMessage(String message)
     {
@@ -177,8 +123,11 @@ public class Client {
 
     }
 
-    public void joinGameRoomPanel(PlayerFeaturesInterface player)
-    {
+    public void joinGameRoomPanel(PlayerFeaturesInterface player) throws RemoteException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Provide a token of game room, in which u want to connect: ");
+        String roomToken = scanner.nextLine();
+        System.out.println(player.joinGameRoom(getUserToken(),roomToken));
 
     }
 

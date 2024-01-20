@@ -19,10 +19,10 @@ public class Main {
         String userName = scanner.nextLine();
         String userToken = UUID.randomUUID() + "@" + userName;
 
-        Registry registry = LocateRegistry.getRegistry("localhost",1099);
+        Registry registry = LocateRegistry.getRegistry("localhost",9090);
         PlayerFeaturesInterface player = (PlayerFeaturesInterface) registry.lookup("Player");
 
-        Socket socket = new Socket("localhost",1234);
+        Socket socket = new Socket("localhost",9091);
         Client client = new Client(socket,userToken);
         client.sendMessage(userToken);
 

@@ -12,8 +12,8 @@ import java.util.*;
 public class Server {
     private String[][] map;
     public Registry registry;
-    public static int rmiPort = 1099;
-    public static int port = 1234;
+    public static int rmiPort = 9090;
+    public static int port = 9091;
     private ServerSocket serverSocket;
     //private List<Participant> participants = new ArrayList<>();
     private ArrayList<ClientHandler> clients = new ArrayList<>();
