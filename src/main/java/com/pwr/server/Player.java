@@ -31,7 +31,13 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
     }
 
     @Override
-    public String joinGameRoom(String playerToken, String roomToken) throws RemoteException {
+    public int joinGameRoom(String playerToken, String roomToken) throws RemoteException {
+        /*
+           result -1 - ERROR! The room with provided token doesn't exit.Try again!
+           result 0 - You can't connect to this room, because lobby is full. Try again later or connect to other room.
+           result 1 - You have successfully connected to room!
+         */
+        int result = -1;
         for(String key : gameRooms.keySet())
         {
             if(key.equals(roomToken))
@@ -40,18 +46,34 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
                 int status = room.addNewPlayer(playerToken);
                 if(status == 0)
                 {
-                    return "You can't connect to this room, because lobby is full. Try again later or connect to other room.";
+                    result = 0;
+                    return 0;
                 } else if (status == 1) {
-                    return "You have successfully connected to room " + roomToken.substring(roomToken.indexOf("@")+1) + "!";
+                    result = 1;
+                    return 1;
                 }
             }
         }
-        return "ERROR!The room with provided token doesn't exit.Try again!";
+        return result;
     }
 
     @Override
-    public String leaveGameRoom(String playerToken, String roomToken) throws RemoteException {
-        return null;
+    public int leaveGameRoom(String playerToken, String roomToken) throws RemoteException {
+        if(!gameRooms.containsKey(roomToken))
+        {
+            return -1;
+            //nie ma takiej room
+        }
+        GameRoom room = gameRooms.get(roomToken);
+        if(!room.hasPlayer(playerToken))
+        {
+            return 0;
+            //nie ma takiego gracza w tej room
+        }
+        room.removePlayer(playerToken);
+        //zostal usuniety z room
+        return 1;
+
     }
 
     @Override
@@ -66,7 +88,7 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
         for(Map.Entry<String,GameRoom> entry: gameRooms.entrySet())
         {
             //System.out.println("name: " + entry.getKey() + " | token: " + entry.getValue());
-            String string = "name: " + entry.getValue().getName() + " | number of player: " + entry.getValue().getPlayerNumber()+ " | token: " + entry.getKey();
+            String string = "name: " + entry.getValue().getName() + " | number of player: " + entry.getValue().getPlayersNumber()+ " | token: " + entry.getKey();
             gameRoomsList.add(string);
         }
         return gameRoomsList;
@@ -83,6 +105,13 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
             }
         }
         return "Server don't have any room with token: " + roomToken + ".Try again.";
+    }
+
+    @Override
+    public int getNumberOfPlayersInRoom(String roomToken) throws RemoteException {
+        GameRoom room = gameRooms.get(roomToken);
+        int numberOfPlayersInSession = room.getPlayersNumber();
+        return numberOfPlayersInSession;
     }
 
     @Override

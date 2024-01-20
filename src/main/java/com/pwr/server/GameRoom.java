@@ -17,7 +17,7 @@ public class GameRoom {
     public String getName() {
         return name;
     }
-    public int getPlayerNumber()
+    public int getPlayersNumber()
     {
         return playersInfo.size();
     }
@@ -37,6 +37,21 @@ public class GameRoom {
         System.out.println("Added new player ( " + playerToken.substring(playerToken.indexOf("@")+1) + " ) with token: " + playerToken);
         System.out.println("Number of players in game room: " + playersInfo.size());
         return 1;
+    }
+
+    public boolean hasPlayer(String playerToken)
+    {
+        if(playersInfo.containsKey(playerToken))
+        {
+            return true;
+        }
+        return false;
+
+    }
+
+    public void removePlayer(String playerToken)
+    {
+        playersInfo.remove(playerToken);
     }
 
     @Override

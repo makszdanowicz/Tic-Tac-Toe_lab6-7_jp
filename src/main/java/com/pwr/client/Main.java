@@ -43,7 +43,7 @@ public class Main {
             client.playerMenuPanel();
             Scanner scannerOption = new Scanner(System.in);
             String option = scannerOption.nextLine();
-            while(!option.equals("5")) {
+            while(!option.equals("0")) {
                 switch (option) {
                     case "1":
                         client.createRoomPanel(player);
@@ -55,6 +55,9 @@ public class Main {
                         client.joinGameRoomPanel(player);
                         break;
                     case "4":
+                        client.leaveGameRoomPanel(player);
+                        break;
+                    case "5":
                         client.deleteGameRoomPanel(player);
                         break;
                     default:

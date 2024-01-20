@@ -1,18 +1,12 @@
 package com.pwr.client;
 
-import com.pwr.server.GameRoom;
 import com.pwr.server.PlayerFeaturesInterface;
 
 import java.io.*;
 import java.net.Socket;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class Client {
     private Socket socket;
@@ -92,8 +86,9 @@ public class Client {
         System.out.println("|Create a game room -- type [1]                       |");
         System.out.println("|See the list of created rooms -- type [2]            |");
         System.out.println("|Join a game room -- type [3]                         |");
-        System.out.println("|Delete a game room -- type [4]                       |");
-        System.out.println("|Exit from program -- type [5]                        |");
+        System.out.println("|Leave a game room -- type [4]                        |");
+        System.out.println("|Delete a game room -- type [5]                       |");
+        System.out.println("|Exit from program -- type [0]                        |");
         System.out.println("._____________________________________________________.");
         System.out.println("Type and send option that u want to do:");
     }
@@ -127,8 +122,74 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Provide a token of game room, in which u want to connect: ");
         String roomToken = scanner.nextLine();
-        System.out.println(player.joinGameRoom(getUserToken(),roomToken));
+        int result = player.joinGameRoom(getUserToken(),roomToken);
+        if(result == -1)
+        {
+            System.out.println("ERROR!The room with provided token doesn't exit.Try again!");
+        }
+        else if(result == 0)
+        {
+            System.out.println("You can't connect to this room, because lobby is full. Try again later or connect to other room.");
+        }
+        else if(result == 1)
+        {
+            setConnectedRoomToken(roomToken);
+            System.out.println("You have successfully connected to room " + roomToken.substring(roomToken.indexOf("@")+1) + "!");
+            int numberOfPlayers = player.getNumberOfPlayersInRoom(roomToken);
+            showGameSession(roomToken.substring(roomToken.indexOf("@")+1),numberOfPlayers,player);
+        }
 
+    }
+
+    private void showGameSession(String roomName, int numberOfPlayers, PlayerFeaturesInterface player) throws RemoteException {
+        System.out.println();
+        System.out.println("{---------------------------------------------------------}");
+        System.out.println("                    " + roomName.toUpperCase() +" session");
+        System.out.println("Room token: " + getConnectedRoomToken());
+        System.out.println("Number of players in room: " + numberOfPlayers);
+        if(numberOfPlayers == 1)
+        {
+            System.out.println("Can't start a game.You need to wait for other player to join");
+            System.out.println("Would you like to wait(press 'w') or u want to leave this room(press 'l'):");
+            Scanner scanner = new Scanner(System.in);
+            String answer = scanner.nextLine();
+            if(answer.equals("w"))
+            {
+
+            } else if (answer.equals("l")) {
+                leaveGameRoomPanel(player);
+            }
+
+        }
+        else if(numberOfPlayers == 2)
+        {
+            startGameSession();
+        }
+
+    }
+
+    private void startGameSession()
+    {
+
+    }
+
+    public void leaveGameRoomPanel(PlayerFeaturesInterface player) throws RemoteException{
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Provide a token of game room that u want to leave");
+        String roomToken = scanner.nextLine();
+        int result = player.leaveGameRoom(getUserToken(),roomToken);
+        if(result == -1)
+        {
+            System.out.println("ERROR! There is no room with this token. Please check the token of the room that u want to leave and try again!");
+        }
+        else if(result == 0)
+        {
+            System.out.println("ERROR! You can't leave this room, because you are not connected to this room!");
+        }
+        else if(result == 1)
+        {
+            System.out.println("You have successfully leave chosen room!");
+        }
     }
 
     public void deleteGameRoomPanel(PlayerFeaturesInterface player) throws RemoteException {
