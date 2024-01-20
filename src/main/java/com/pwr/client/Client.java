@@ -141,14 +141,14 @@ public class Client {
 
     public void playerMenuPanel()
     {
-        System.out.println("------------------------------------------------------");
-        System.out.println("In player mode you can:");
-        System.out.println("Create a game room -- type [1]");
-        System.out.println("See the list of created rooms -- type [2]");
-        System.out.println("Join a game room -- type [3]");
-        System.out.println("Delete a game room -- type [4]");
-        System.out.println("Exit from program -- type [5]");
-        System.out.println("------------------------------------------------------");
+        System.out.println(".-----------------------------------------------------.");
+        System.out.println("|In player mode you can:                              |");
+        System.out.println("|Create a game room -- type [1]                       |");
+        System.out.println("|See the list of created rooms -- type [2]            |");
+        System.out.println("|Join a game room -- type [3]                         |");
+        System.out.println("|Delete a game room -- type [4]                       |");
+        System.out.println("|Exit from program -- type [5]                        |");
+        System.out.println("._____________________________________________________.");
         System.out.println("Type and send option that u want to do:");
     }
 
@@ -159,7 +159,7 @@ public class Client {
         System.out.println("                   CREATING A GAME ROOM");
         System.out.println("Provide a room name: ");
         String roomName = scanner.nextLine();
-        player.createGameRoom(roomName);
+        System.out.println(player.createGameRoom(roomName));
         //String gameRoomToken = UUID.randomUUID().toString() + "@" + roomName;
 
 
@@ -182,9 +182,11 @@ public class Client {
 
     }
 
-    public void deleteGameRoomPanel(PlayerFeaturesInterface player)
-    {
-
+    public void deleteGameRoomPanel(PlayerFeaturesInterface player) throws RemoteException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Provide a token of game room that u want do delete: ");
+        String roomToken = scanner.nextLine();
+        System.out.println(player.deleteRoom(roomToken));
     }
 
 

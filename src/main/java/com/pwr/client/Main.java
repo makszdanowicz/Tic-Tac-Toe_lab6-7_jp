@@ -61,6 +61,8 @@ public class Main {
                         System.out.println("There is not available option of number - " + option + ".Please enter a number of option from '1' to '5' to continue the program!");
                         break;
                 }
+                System.out.println();
+                System.out.println();
                 client.playerMenuPanel();
                 option = scannerOption.nextLine();
             }
