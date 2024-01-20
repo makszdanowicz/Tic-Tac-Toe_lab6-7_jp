@@ -1,6 +1,7 @@
 package com.pwr.server;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class GameRoom {
     private String name;
@@ -47,6 +48,29 @@ public class GameRoom {
         }
         return false;
 
+    }
+
+    public String getOpponentToken(String playerToken)
+    {
+        for(Map.Entry<String,String> entry : playersInfo.entrySet())
+        {
+            if(!entry.getKey().equals(playerToken))
+            {
+                return entry.getKey();
+            }
+        }
+        return playerToken;
+    }
+    public String getPlayerFigure(String playerToken)
+    {
+        for(Map.Entry<String,String> entry : playersInfo.entrySet())
+        {
+            if(entry.getKey().equals(playerToken))
+            {
+                return entry.getValue();
+            }
+        }
+        return "error";
     }
 
     public void removePlayer(String playerToken)

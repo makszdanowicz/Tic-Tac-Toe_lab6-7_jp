@@ -115,6 +115,19 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
     }
 
     @Override
+    public String getTokenOfOpponent(String roomToken, String playerToken) throws RemoteException {
+        GameRoom room = gameRooms.get(roomToken);
+        return room.getOpponentToken(playerToken);
+    }
+
+    @Override
+    public String getFigureOfPlayer(String roomToken,String playerToken) throws RemoteException {
+        GameRoom room = gameRooms.get(roomToken);
+        return room.getPlayerFigure(playerToken);
+    }
+
+
+    @Override
     public int makeMove(String token, String roomToken, String playerType) throws RemoteException {
         return 0;
     }

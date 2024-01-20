@@ -144,7 +144,7 @@ public class Client {
     private void showGameSession(String roomName, int numberOfPlayers, PlayerFeaturesInterface player) throws RemoteException {
         System.out.println();
         System.out.println("{---------------------------------------------------------}");
-        System.out.println("                    " + roomName.toUpperCase() +" session");
+        System.out.println("                    " + roomName.toUpperCase() +" ROOM");
         System.out.println("Room token: " + getConnectedRoomToken());
         System.out.println("Number of players in room: " + numberOfPlayers);
         if(numberOfPlayers == 1)
@@ -155,7 +155,24 @@ public class Client {
             String answer = scanner.nextLine();
             if(answer.equals("w"))
             {
-
+                while (answer.equals("w"))
+                {
+                    if(player.getNumberOfPlayersInRoom(getConnectedRoomToken()) == 1)
+                    {
+                        System.out.println("Waiting to other player to join...");
+                        System.out.println("Would you like to continue waiting(press 'w') or u want to leave this room(press 'l'):");
+                        answer = scanner.nextLine();
+                    } else if (player.getNumberOfPlayersInRoom(getConnectedRoomToken()) == 2) {
+                        break;
+                    }
+                }
+                if(answer.equals("l"))
+                {
+                    leaveGameRoomPanel(player);
+                }
+                else {
+                    startGameSession(player);
+                }
             } else if (answer.equals("l")) {
                 leaveGameRoomPanel(player);
             }
@@ -163,14 +180,20 @@ public class Client {
         }
         else if(numberOfPlayers == 2)
         {
-            startGameSession();
+            startGameSession(player);
         }
 
     }
 
-    private void startGameSession()
+    private void startGameSession(PlayerFeaturesInterface player) throws RemoteException
     {
-
+        System.out.println();
+        System.out.println("-------------|[START OF GAME]|---------------");
+        String figure = player.getFigureOfPlayer(getConnectedRoomToken(),getUserToken());
+        String opponentToken = player.getTokenOfOpponent(getConnectedRoomToken(),getUserToken());
+        System.out.println("Your figure is: " + figure);
+        System.out.println("Your opponent is: " + opponentToken.substring(opponentToken.indexOf("@")+1));
+        
     }
 
     public void leaveGameRoomPanel(PlayerFeaturesInterface player) throws RemoteException{
