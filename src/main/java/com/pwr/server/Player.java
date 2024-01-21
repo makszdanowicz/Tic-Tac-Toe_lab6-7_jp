@@ -168,6 +168,17 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
 
     @Override
     public int restartGame(String roomToken, String playerToken) throws RemoteException {
-        return 0;
+        if(!gameRooms.containsKey(roomToken))
+        {
+            return -2;
+        }
+        GameRoom room = gameRooms.get(roomToken);
+        if(!room.hasPlayer(playerToken))
+        {
+            return -1;
+        }
+
+        return room.restart(playerToken);//0 only 1 player vote for restar | //1 2players vote to restart game
+
     }
 }

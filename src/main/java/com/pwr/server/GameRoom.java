@@ -2,6 +2,7 @@ package com.pwr.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GameRoom {
     private String name;
@@ -9,6 +10,7 @@ public class GameRoom {
     private HashMap<String, String> playersInfo;
     private TicTacToeGame game;
     private String tokenOfTurnPlayer;
+    private Set<String> playersVoteForRestart;
 
     public GameRoom(String name, String token)
     {
@@ -145,7 +147,22 @@ public class GameRoom {
         return -1;//error
     }
 
+    public int restart(String playerToken)
+    {
+        playersVoteForRestart.add(playerToken);
+        if(playersVoteForRestart.size() == 1)
+        {
+            setTokenOfTurnPlayer(playerToken);
+            return 0;
+        }
+        if(playersVoteForRestart.size() == 2);
+        {
+            game = new TicTacToeGame();
+            return 1;
+        }
 
+
+    }
     @Override
     public String toString() {
         return "GameRoom{" +

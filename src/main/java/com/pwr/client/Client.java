@@ -236,7 +236,41 @@ public class Client {
         String answer = scanner.nextLine();
         if(answer.equals("n"))
         {
-            startGameSession(player);
+            int status = player.restartGame(getConnectedRoomToken(),getUserToken());
+            if(status == -2)
+            {
+                System.out.println("Can't restart because the room is not exists");
+            }
+            else if(status == -1)
+            {
+                System.out.println("Can't restart game cause you are not in this room");
+            } else if (status == 0)
+            {
+                System.out.println("You voted to restart a game, waiting for the opponent to make a decision");
+                while(status != 1)
+                {
+                    status = player.restartGame(getConnectedRoomToken(),getUserToken());
+                    int playerNumber = player.getNumberOfPlayersInRoom(connectedRoomToken);
+                    if(playerNumber < 2)
+                    {
+                        System.out.println("Your opponent has left the room");
+                        System.out.println("You will be kicked from game room");
+                        leaveGameRoomPanel(player);
+                    }
+                    System.out.println("Do u wish to continue waiting(type 'yes' or 'no'):");
+                    Scanner scanner1 = new Scanner(System.in);
+                    String contin = scanner1.nextLine();
+                    if(contin.equals("n"))
+                    {
+                        leaveGameRoomPanel(player);
+                    }
+                }
+            }
+            else if(status == 1)
+            {
+                System.out.println("Two players voted to restart game, the game will be restart");
+                startGameSession(player);
+            }
         }
         else if(answer.equals("l"))
         {
