@@ -218,11 +218,12 @@ public class Client {
                 {
                     isYourTurn = player.turnStatus(getConnectedRoomToken(),getUserToken());
                 }
+                resultOfCombination = player.checkCombination(getConnectedRoomToken(),figure);
             }
         }
         if(resultOfCombination == 1)
         {
-            System.out.println("End of the game. " + figure + "won!");
+            System.out.println("End of the game. " + figure + " won!");
         }
         else if(resultOfCombination == 0)
         {

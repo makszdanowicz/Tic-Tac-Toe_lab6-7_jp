@@ -95,10 +95,14 @@ public class TicTacToeGame {
     public int showResultOfGame(String type)
     {
         //Checking maybe somebody wins(X or O)
-        if(checkCombination(type))
+        if(checkCombination("X"))
         {
-            System.out.println("Game over!" + type + "wins");
-            //System.out.println("Game over!");
+            System.out.println("Game over! X wins");
+            return 1;
+        }
+        else if(checkCombination("O"))
+        {
+            System.out.println("Game over! O wins");
             return 1;
         }
         //Checking maybe game is draw or not completed
