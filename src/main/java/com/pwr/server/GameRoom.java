@@ -104,9 +104,10 @@ public class GameRoom {
     public int makeMove(String playerToken, String playerFigure, int moveNumber)
     {
         int status = game.makeMove(playerFigure,moveNumber);
-        for(String player : playersInfo.keySet()){
-            if(!player.equals(playerToken)){
-                setTokenOfTurnPlayer(player);
+        System.out.println(playerToken + "with figure " + playerFigure + " chosen slot " + moveNumber);
+        for(String keyToken : playersInfo.keySet()){
+            if(!keyToken.equals(playerToken)){
+                setTokenOfTurnPlayer(keyToken);
                 break;
             }
         }
