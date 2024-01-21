@@ -164,4 +164,9 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
         //2 - nextMove
         return result;
     }
+
+    @Override
+    public int restartGame(String roomToken, String playerToken) throws RemoteException {
+        return 0;
+    }
 }

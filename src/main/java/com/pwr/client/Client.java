@@ -125,7 +125,7 @@ public class Client {
         int result = player.joinGameRoom(getUserToken(),roomToken);
         if(result == -1)
         {
-            System.out.println("ERROR!The room with provided token doesn't exit.Try again!");
+            System.out.println("ERROR!The room with provided token doesn't exit. Try again!");
         }
         else if(result == 0)
         {
@@ -194,9 +194,6 @@ public class Client {
         System.out.println("Your figure is: " + figure);
         System.out.println("Your opponent is: " + opponentToken.substring(opponentToken.indexOf("@")+1));
         System.out.println(".____________________________________________.");
-//        String[][] map = player.getMap(getConnectedRoomToken());
-//        showMap(map);
-//        System.out.println();
         boolean isYourTurn = player.turnStatus(getConnectedRoomToken(),getUserToken());
         //X - first Turn
         int resultOfCombination = player.checkCombination(getConnectedRoomToken(),figure);
@@ -261,7 +258,7 @@ public class Client {
         {
             while(resultOfMove ==-1 || resultOfMove == 0)
             {
-//TODO                System.out.println("ERROR! Map don't have any slot with this number");
+                System.out.println("ERROR! Map don't have any slot with this number");
                 System.out.println("Please try again");
                 System.out.println("Type the number in which you want enter a move:");
                 number = scanner.nextInt();

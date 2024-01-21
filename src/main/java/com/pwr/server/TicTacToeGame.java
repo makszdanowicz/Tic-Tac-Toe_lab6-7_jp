@@ -57,7 +57,7 @@ public class TicTacToeGame {
             if(move < 3)
             {
                 map[0][move] = figure;
-                return 1;
+                return 1;//EVERYTHING IS OKAY
             }
             else
             {
@@ -65,29 +65,13 @@ public class TicTacToeGame {
                 int j = move % 3;
                 if(map[i][j].equals("X") || map[i][j].equals("O"))
                 {
-                    return 0;
+                    return 0;//ON THIS POSITION FIGURE IS ALREADY
                 }
                 else {
                     map[i][j] = figure;
                 }
             }
-            //String moveString = String.valueOf(move);
-//            for(int i = 0; i < map.length; i++)
-//                {
-//                    for(int j = 0; j < map[i].length; j++)
-//                    {
-//                        if(map[i][j].equals(moveString))
-//                        {
-//                            map[i][j] = figure;
-//                            return 1; //EVERYTHING IS OKAY
-//                        }
-//                        else if(map[i][j].equals("X") || map[i][j].equals("O"))
-//                        {
-//                            return 0; //ON THIS POSITION FIGURE IS ALREADY
-//                        }
-//                    }
-//                }
-            return 1;
+            return 1;//EVERYTHING IS OKAY
         }
         return -1;//There is no slot with this number
     }

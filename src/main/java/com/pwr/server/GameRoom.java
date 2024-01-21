@@ -103,15 +103,20 @@ public class GameRoom {
 
     public int makeMove(String playerToken, String playerFigure, int moveNumber)
     {
+        System.out.println("Now turn has: " + getTokenOfTurnPlayer());
         int status = game.makeMove(playerFigure,moveNumber);
         System.out.println(playerToken + "with figure " + playerFigure + " chosen slot " + moveNumber);
-        for(String keyToken : playersInfo.keySet()){
-            if(!keyToken.equals(playerToken)){
-                setTokenOfTurnPlayer(keyToken);
-                break;
+        if(status == 1) {
+            for (String keyToken : playersInfo.keySet())
+            {
+                if (!keyToken.equals(playerToken)) {
+                    setTokenOfTurnPlayer(keyToken);
+                    break;
+                }
             }
         }
-        System.out.println("Player turn: " + getTokenOfTurnPlayer());
+        System.out.println("Next turn has: " + getTokenOfTurnPlayer());
+        //System.out.println("Player turn: " + getTokenOfTurnPlayer());
         return status;
     }
 
