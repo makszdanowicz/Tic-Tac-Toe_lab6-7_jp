@@ -249,7 +249,6 @@ public class Client {
                 System.out.println("You voted to restart a game, waiting for the opponent to make a decision");
                 while(status != 1)
                 {
-                    status = player.restartGame(getConnectedRoomToken(),getUserToken());
                     int playerNumber = player.getNumberOfPlayersInRoom(connectedRoomToken);
                     if(playerNumber < 2)
                     {
@@ -260,9 +259,14 @@ public class Client {
                     System.out.println("Do u wish to continue waiting(type 'yes' or 'no'):");
                     Scanner scanner1 = new Scanner(System.in);
                     String contin = scanner1.nextLine();
-                    if(contin.equals("n"))
+                    if(contin.equals("no"))
                     {
                         leaveGameRoomPanel(player);
+                    }
+                    if(contin.equals("yes"))
+                    {
+                        System.out.println("Ok,continue waiting...");
+                        status = player.restartGame(getConnectedRoomToken(),getUserToken());
                     }
                 }
             }

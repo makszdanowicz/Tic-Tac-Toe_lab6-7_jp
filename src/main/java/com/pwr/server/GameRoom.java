@@ -1,6 +1,7 @@
 package com.pwr.server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class GameRoom {
     private HashMap<String, String> playersInfo;
     private TicTacToeGame game;
     private String tokenOfTurnPlayer;
-    private Set<String> playersVoteForRestart;
+    private Set<String> playersVoteForRestart = new HashSet<>();
 
     public GameRoom(String name, String token)
     {
