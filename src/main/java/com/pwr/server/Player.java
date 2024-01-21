@@ -159,7 +159,8 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
     public int checkCombination(String roomToken,String playerFigure) throws RemoteException {
         GameRoom room = gameRooms.get(roomToken);
         int result = room.checkCombination(playerFigure);
-        //1 - game over
+        //5 - game over X won
+        //1 - game over O won
         //0 - draw
         //2 - nextMove
         return result;

@@ -197,7 +197,8 @@ public class Client {
         boolean isYourTurn = player.turnStatus(getConnectedRoomToken(),getUserToken());
         //X - first Turn
         int resultOfCombination = player.checkCombination(getConnectedRoomToken(),figure);
-        //1 - game over
+        //5 - game over X won
+        //1 - game over O won
         //0 - draw
         //2 - nextMove
         while(resultOfCombination == 2) // playing until don't have a draw or someone won
@@ -220,7 +221,11 @@ public class Client {
         }
         if(resultOfCombination == 1)
         {
-            System.out.println("End of the game. " + figure + " won!");
+            System.out.println("End of the game. O won!");
+        }
+        else if(resultOfCombination == 5)
+        {
+            System.out.println("End of the game. X won!");
         }
         else if(resultOfCombination == 0)
         {

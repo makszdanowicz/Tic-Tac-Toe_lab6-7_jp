@@ -82,7 +82,7 @@ public class TicTacToeGame {
         if(checkCombination("X"))
         {
             System.out.println("Game over! X wins");
-            return 1;
+            return 5;
         }
         else if(checkCombination("O"))
         {

@@ -125,8 +125,13 @@ public class GameRoom {
         int result = game.showResultOfGame(playerFigure);
         if(result == 1)
         {
-            //End of game
+            //End of game O won
             return 1;
+        }
+        else if(result == 5)
+        {
+            //End of game X won
+            return 5;
         }
         else if(result == 0)
         {
