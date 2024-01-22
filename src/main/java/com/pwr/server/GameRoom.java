@@ -11,7 +11,6 @@ public class GameRoom {
     private HashMap<String, String> playersInfo;
     private TicTacToeGame game;
     private String tokenOfTurnPlayer;
-    private Set<String> playersVoteForRestart = new HashSet<>();
 
     public GameRoom(String name, String token)
     {
@@ -25,6 +24,10 @@ public class GameRoom {
         return name;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     public String getTokenOfTurnPlayer() {
         return tokenOfTurnPlayer;
     }
@@ -33,10 +36,15 @@ public class GameRoom {
         this.tokenOfTurnPlayer = tokenOfTurnPlayer;
     }
 
+    public void setGame(TicTacToeGame game) {
+        this.game = game;
+    }
+
     public int getPlayersNumber()
     {
         return playersInfo.size();
     }
+
 
     public int addNewPlayer(String playerToken)
     {   if(playersInfo.size() >= 2)
@@ -150,19 +158,16 @@ public class GameRoom {
 
     public int restart(String playerToken)
     {
-        playersVoteForRestart.add(playerToken);
-        if(playersVoteForRestart.size() == 1)
+        playersInfo.remove(playerToken);
+        System.out.println("Kicked " + playerToken.substring(playerToken.indexOf("@")+1) + " from room - " + getName());
+        if(playersInfo.size() == 0)
         {
-            setTokenOfTurnPlayer(playerToken);
-            return 0;
-        }
-        if(playersVoteForRestart.size() == 2);
-        {
-            game = new TicTacToeGame();
+            TicTacToeGame game1 = new TicTacToeGame();
+            game = game1;
+            System.out.println("restart: Create a new clear board for room - " + getName());
             return 1;
         }
-
-
+        return 0;
     }
     @Override
     public String toString() {

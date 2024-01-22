@@ -231,57 +231,9 @@ public class Client {
         {
             System.out.println("End of the game. It's Draw!");
         }
-        System.out.println("Would you like to play a new game (press 'n') or you want to leave from this room(press 'l')?");
-        Scanner scanner = new Scanner(System.in);
-        String answer = scanner.nextLine();
-        if(answer.equals("n"))
-        {
-            int status = player.restartGame(getConnectedRoomToken(),getUserToken());
-            if(status == -2)
-            {
-                System.out.println("Can't restart because the room is not exists");
-            }
-            else if(status == -1)
-            {
-                System.out.println("Can't restart game cause you are not in this room");
-            } else if (status == 0)
-            {
-                System.out.println("You voted to restart a game, waiting for the opponent to make a decision");
-                while(status != 1)
-                {
-                    int playerNumber = player.getNumberOfPlayersInRoom(connectedRoomToken);
-                    if(playerNumber < 2)
-                    {
-                        System.out.println("Your opponent has left the room");
-                        System.out.println("You will be kicked from game room");
-                        leaveGameRoomPanel(player);
-                    }
-                    System.out.println("Do u wish to continue waiting(type 'yes' or 'no'):");
-                    Scanner scanner1 = new Scanner(System.in);
-                    String contin = scanner1.nextLine();
-                    if(contin.equals("no"))
-                    {
-                        leaveGameRoomPanel(player);
-                    }
-                    if(contin.equals("yes"))
-                    {
-                        System.out.println("Ok,continue waiting...");
-                        status = player.restartGame(getConnectedRoomToken(),getUserToken());
-                    }
-                }
-            }
-            else if(status == 1)
-            {
-                System.out.println("Two players voted to restart game, the game will be restart");
-                startGameSession(player);
-            }
-        }
-        else if(answer.equals("l"))
-        {
-            System.out.println("Token of game room: " + getConnectedRoomToken());
-            leaveGameRoomPanel(player);
-        }
 
+        player.restartGame(getConnectedRoomToken(),getUserToken());
+        System.out.println("You have been kicked from game room, because game session is over!");
     }
 
     private void playGame(PlayerFeaturesInterface player,String figure) throws RemoteException {
@@ -308,21 +260,9 @@ public class Client {
                 resultOfMove = player.makeMove(getConnectedRoomToken(),getUserToken(),figure,number);
             }
         }
-//        if(resultOfMove == 0) {
-//            while(resultOfMove == 0)
-//            {
-//                System.out.println("On chosen position figure is already");
-//                System.out.println("Please try another position");
-//                System.out.println("Type the number in which you want enter a move:");
-//                number = scanner.nextInt();
-//                resultOfMove = player.makeMove(getConnectedRoomToken(),getUserToken(),figure,number);
-//            }
-//        }
         if(resultOfMove == 1)
         {
             System.out.println("The position № " + number + " now is " + figure);
-//            map = player.getMap(getConnectedRoomToken());
-//            showMap(map);
             System.out.println();
         }
         //SETTURNSTATUS -> FALSE
