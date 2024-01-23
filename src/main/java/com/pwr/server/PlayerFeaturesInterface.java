@@ -11,6 +11,7 @@ public interface PlayerFeaturesInterface extends Remote {
     List<String> showRooms() throws RemoteException;
     String deleteRoom(String roomToken) throws RemoteException;
     int getNumberOfPlayersInRoom(String roomToken) throws RemoteException;
+    String getTokenOfPlayerWhoTurn(String roomToken) throws RemoteException;
     String getTokenOfOpponent(String roomToken,String playerToken) throws RemoteException;
     String getFigureOfPlayer(String roomToken,String playerToken) throws RemoteException;
     String[][] getMap(String roomToken) throws RemoteException;
@@ -18,6 +19,7 @@ public interface PlayerFeaturesInterface extends Remote {
     int makeMove(String roomToken,String playerToken, String playerFigure, int moveNumber) throws RemoteException;
     int checkCombination(String roomToken,String playerFigure) throws RemoteException;
     int restartGame(String roomToken,String playerToken) throws RemoteException;
+    boolean hasRoomWithToken(String roomToken) throws RemoteException;
 
 
 }

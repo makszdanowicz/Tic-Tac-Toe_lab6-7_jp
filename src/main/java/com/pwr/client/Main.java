@@ -73,19 +73,22 @@ public class Main {
         else if(role.equals("w"))
         {
             System.out.println("You have chosen watcher mode");
+            client.watcherPanel(player,client);
         }
 
         //sent next requests
         while(true)
         {
 
-            System.out.println("what u would like to do?(if 'exit' type it)");
+            //System.out.println("what u would like to do?(if 'exit' type it)");
+            System.out.println("Type 'exit' to disconnect with program:");
             String request = scanner.nextLine();
             if(request.equals("exit") || request.equals("quit"))
             {
+                client.sendMessage(request);
                 break;
             }
-            client.sendMessage(request);
+            //client.sendMessage(request);
         }
         client.closeEverything(socket,client.getBufferedReader(),client.getBufferedWriter());
     }

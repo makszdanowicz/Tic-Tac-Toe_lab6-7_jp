@@ -16,7 +16,7 @@ public class Main {
             server.registry = LocateRegistry.createRegistry(Server.rmiPort);
             server.registry.rebind("Player",player);
 
-            server.startServer();
+            server.startServer(player);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

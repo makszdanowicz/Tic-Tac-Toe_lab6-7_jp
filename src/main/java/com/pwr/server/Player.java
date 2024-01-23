@@ -115,6 +115,12 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
     }
 
     @Override
+    public String getTokenOfPlayerWhoTurn(String roomToken) throws RemoteException {
+        return gameRooms.get(roomToken).getTokenOfTurnPlayer();
+    }
+
+
+    @Override
     public String getTokenOfOpponent(String roomToken, String playerToken) throws RemoteException {
         GameRoom room = gameRooms.get(roomToken);
         return room.getOpponentToken(playerToken);
@@ -171,4 +177,14 @@ public class Player extends UnicastRemoteObject implements PlayerFeaturesInterfa
         GameRoom room = gameRooms.get(roomToken);
         return room.restart(playerToken);
     }
+
+    @Override
+    public boolean hasRoomWithToken(String roomToken) throws RemoteException {
+        if(gameRooms.containsKey(roomToken))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

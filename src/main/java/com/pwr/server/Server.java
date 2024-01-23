@@ -15,33 +15,13 @@ public class Server {
     public static int rmiPort = 9090;
     public static int port = 9091;
     private ServerSocket serverSocket;
-    //private List<Participant> participants = new ArrayList<>();
     private ArrayList<ClientHandler> clients = new ArrayList<>();
     public Server(ServerSocket serverSocket)
     {
         this.serverSocket = serverSocket;
     }
 
-//    public static void main(String[] args)
-//    {
-//        try {
-//            ServerSocket serverSocket = new ServerSocket(port);
-//            Server server = new Server(serverSocket);
-//
-//            Player player = new Player();
-//            server.registry = LocateRegistry.createRegistry(rmiPort);
-//            server.registry.rebind("Player",player);
-//            //player.createGameRoom("AmdinRoom");
-//
-//            server.startServer();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//    }
-
-    public void startServer()
+    public void startServer(Player player)
     {
         try{
             while(!serverSocket.isClosed())
@@ -51,7 +31,7 @@ public class Server {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String userToken = reader.readLine();
                 System.out.println(userToken);
-                ClientHandler clientThread = new ClientHandler(socket,userToken);
+                ClientHandler clientThread = new ClientHandler(socket,userToken,player);
                 clients.add(clientThread);
                 Thread thread = new Thread(clientThread);
                 thread.start();

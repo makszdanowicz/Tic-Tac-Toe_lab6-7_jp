@@ -60,7 +60,7 @@ public class GameRoom {
             playersInfo.put(playerToken,"O");
         }
         System.out.println("Added new player ( " + playerToken.substring(playerToken.indexOf("@")+1) + " ) with token: " + playerToken);
-        System.out.println("Number of players in game room: " + playersInfo.size());
+        System.out.println("Number of players in game room - " +getName()+ ": " + playersInfo.size());
         return 1;
     }
 
@@ -116,7 +116,7 @@ public class GameRoom {
     {
         System.out.println("Now turn has: " + getTokenOfTurnPlayer());
         int status = game.makeMove(playerFigure,moveNumber);
-        System.out.println(playerToken + "with figure " + playerFigure + " chosen slot " + moveNumber);
+        System.out.println(playerToken + " with figure " + playerFigure + " chosen slot " + moveNumber);
         if(status == 1) {
             for (String keyToken : playersInfo.keySet())
             {
