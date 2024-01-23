@@ -1,6 +1,6 @@
 package com.pwr.client;
 
-import com.pwr.server.PlayerFeaturesInterface;
+import com.pwr.common.PlayerFeaturesInterface;
 
 import java.io.IOException;
 import java.net.Socket;

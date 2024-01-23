@@ -1,11 +1,10 @@
 package com.pwr.client;
 
-import com.pwr.server.PlayerFeaturesInterface;
+import com.pwr.common.PlayerFeaturesInterface;
 
 import java.io.*;
 import java.net.Socket;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package com.pwr.server;
+package com.pwr.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

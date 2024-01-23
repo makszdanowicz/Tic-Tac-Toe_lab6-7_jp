@@ -1,5 +1,7 @@
 package com.pwr.server;
 
+import com.pwr.common.PlayerFeaturesInterface;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
