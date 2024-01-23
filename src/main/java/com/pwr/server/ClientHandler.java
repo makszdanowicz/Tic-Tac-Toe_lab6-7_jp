@@ -50,17 +50,10 @@ public class ClientHandler implements Runnable{
                 System.out.println(clientUserName + " have chosen " + role + " mode" );
             }
 
-//            if(role.equals("player"))
-//            {
-//
-//            } else if (role.equals("watcher")) {
-//
-//            }
             while (true)
             {
-                //TUTAJ JUZ WATCHER FEATURES I KOMUNIKACJA Z WATCHEREM
-                //DODAC IF Z PYTANIAMI
                 String request = bufferedReader.readLine();
+                //System.out.println(clientUserName + " request was: " + request);
                 if(request.equals("exit") || request.equals("quit"))
                 {
                     System.out.println(clientUserName + " request was: " + request);
@@ -88,7 +81,7 @@ public class ClientHandler implements Runnable{
                         {
                             stringBuilder.append(element).append(" ");
                         }
-                        stringBuilder.append("\n");
+                        stringBuilder.append("*");
                     }
                     bufferedWriter.write(stringBuilder.toString());
                     bufferedWriter.newLine();

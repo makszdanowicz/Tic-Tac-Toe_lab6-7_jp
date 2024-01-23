@@ -22,4 +22,5 @@ public interface PlayerFeaturesInterface extends Remote {
     boolean hasRoomWithToken(String roomToken) throws RemoteException;
 
 
+
 }

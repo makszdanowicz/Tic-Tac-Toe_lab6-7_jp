@@ -326,84 +326,103 @@ public class Client {
     public void watcherPanel(PlayerFeaturesInterface player,Client client) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("You can connect and view a game between 2 players in chosen room");
-        System.out.println("------------------------------------------------------");
-        System.out.println("                    LIST OF GAME ROOMS");
-        List<String> gameRooms = player.showRooms();
-        for(String room : gameRooms)
+        System.out.println("If you want to see the list of game rooms  to connect one of them type '1':");
+        System.out.println("If you want to close the program type '0' :");
+        String result = scanner.nextLine();
+        if(result.equals("1"))
         {
-            System.out.println(room);
-        }
-        while(gameRooms.size() == 0) //<-----
-        {
-            System.out.println("You have to wait, because players don't create any room");
-            System.out.println("Would you like to wait(type 'w') or you want to disconnect from program(type 'd'):");
-            String answer = scanner.nextLine();
-            if(answer.equals("d"))
+            System.out.println("------------------------------------------------------");
+            System.out.println("                    LIST OF GAME ROOMS");
+            List<String> gameRoomsList = player.showRooms();
+            for(String room : gameRoomsList)
             {
-                break;
+                System.out.println(room);
             }
-            gameRooms = player.showRooms();
-        }
-        if(gameRooms.size() != 0)
-        {
-            System.out.println("Provide a token of Game room that u want to view:");
-            String roomToken = scanner.nextLine();
-            boolean roomExists = player.hasRoomWithToken(roomToken);
-            if(!roomExists)
+//        while(gameRoomsList.size() == 1) //<-----
+//        {
+//            System.out.println("You have to wait, because players don't create any room");
+//            System.out.println("Would you like to wait(type 'w') or you want to disconnect from program(type 'd'):");
+//            String answer = scanner.nextLine();
+//            if(answer.equals("d"))
+//            {
+//                break;
+//            }
+//            gameRoomsList = player.showRooms();
+//        }
+            if(gameRoomsList.size() != 0)
             {
-                System.out.println();
-                System.out.println("There is no room with that token");
-                System.out.println("Check again list of game rooms and try again");
-                System.out.println();
-                watcherPanel(player,client);
-            }
-            else
-            {
-                int playerNumber = player.getNumberOfPlayersInRoom(roomToken);
-                if(playerNumber != 2)
+                System.out.println("Provide a token of Game room that u want to view( or if no rooms created yet type anything else to update info):");
+                String roomToken = scanner.nextLine();
+                boolean roomExists = player.hasRoomWithToken(roomToken);
+                if(!roomExists)
                 {
-                    System.out.println("Error, room doesn't have 2 player in lobby. You must to connect to room with 2 players to watch game!");
+                    System.out.println();
+                    System.out.println("There is no room with that token");
                     System.out.println("Check again list of game rooms and try again");
                     System.out.println();
                     watcherPanel(player,client);
                 }
-                try {
-                    while (true)
+                else
+                {
+                    int playerNumber = player.getNumberOfPlayersInRoom(roomToken);
+                    if(playerNumber != 2)
                     {
-                        String[] players = client.sendWatcherMessage("getPlayersInfo",roomToken).split(",");
-                        String map = client.sendWatcherMessage("getMap",roomToken);
-                        String currentPlayerTurn = client.sendWatcherMessage("getCurrentPlayerTurn",roomToken);
-
-                        System.out.println("-----------------------------------------------");
-                        System.out.println("                ROOM " + roomToken.substring(roomToken.indexOf("@")+1).toUpperCase());
-                        System.out.println("Player 1: " + players[0]);
-                        System.out.println("Player 2: " + players[1]);
-                        System.out.println("Current turn: " + currentPlayerTurn);
-                        System.out.println("-----------------------------------------------");
-                        System.out.println(map);
+                        System.out.println("Error, room doesn't have 2 player in lobby. You must to connect to room with 2 players to watch game!");
+                        System.out.println("Check again list of game rooms and try again");
                         System.out.println();
-
-                        String checkCombinationX = client.sendWatcherMessage("checkCombinationX",roomToken);
-                        //String checkCombinationO = client.sendWatcherMessage("CheckCombinationO",roomToken);
-
-                        System.out.println("Status of game : " + checkCombinationX);
-                        if(!checkCombinationX.equals("Players have next moves!"))
-                        {
-                            System.out.println("If you want to go to watcher menu(type '1') or if u want to exit type anything else: ");
-                            String choice = scanner.nextLine();
-                            if(choice.contains("1"))
-                            {
-                                watcherPanel(player,client);
-                            }
-                            else {
-                                System.exit(0);
-                            }
-                        }
-
+                        watcherPanel(player,client);
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    try {
+                        while (true)
+                        {
+                            String[] players = client.sendWatcherMessage("getPlayersInfo",roomToken).split(",");
+                            String map = client.sendWatcherMessage("getMap",roomToken);
+                            String currentPlayerTurn = client.sendWatcherMessage("getCurrentPlayerTurn",roomToken);
+
+                            System.out.println("-----------------------------------------------");
+                            System.out.println("                ROOM " + roomToken.substring(roomToken.indexOf("@")+1).toUpperCase());
+                            System.out.println("Player 1: " + players[0]);
+                            System.out.println("Player 2: " + players[1]);
+                            System.out.println("Current turn: " + currentPlayerTurn);
+                            System.out.println("-----------------------------------------------");
+                            System.out.println(map.replaceAll("\\*","\n"));
+                            System.out.println();
+
+                            String checkCombinationX = client.sendWatcherMessage("checkCombinationX",roomToken);
+                            //String checkCombinationO = client.sendWatcherMessage("CheckCombinationO",roomToken);
+
+                            System.out.println("Status of game : " + checkCombinationX);
+                            if(!checkCombinationX.equals("Players have next moves!"))
+                            {
+                                System.out.println("If you want to go to watcher menu again(type '1') or if u want to exit type anything else: ");
+                                String choice = scanner.nextLine();
+                                if(choice.contains("1"))
+                                {
+                                    watcherPanel(player,client);
+                                }
+                                else {
+                                    System.exit(0);
+                                }
+                            }
+
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+            }
+        }
+        else if(result.equals("0"))
+        {
+            System.out.println("Are u sure that u want to close the program?");
+            System.out.println("Type 'exit' if you really want to close program or anything else if you are not: ");
+            String answer = scanner.nextLine();
+            if(answer.equals("exit"))
+            {
+                client.closeEverything(socket,bufferedReader,bufferedWriter);
+            }
+            else {
+                watcherPanel(player,client);
             }
         }
     }
