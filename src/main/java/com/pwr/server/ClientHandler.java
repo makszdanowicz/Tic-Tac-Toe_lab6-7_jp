@@ -87,7 +87,7 @@ public class ClientHandler implements Runnable{
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
                 }
-                else if(request.startsWith("currentPlayer"))
+                else if(request.startsWith("getCurrentPlayerTurn"))
                 {
                     String roomToken = request.split(":")[1];
                     String currentPlayerToken = player.getTokenOfPlayerWhoTurn(roomToken);
