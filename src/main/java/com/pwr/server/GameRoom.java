@@ -159,6 +159,7 @@ public class GameRoom {
     public int restart(String playerToken)
     {
         playersInfo.remove(playerToken);
+        //tokenOfTurnPlayer = null;
         System.out.println("Kicked " + playerToken.substring(playerToken.indexOf("@")+1) + " from room - " + getName());
         if(playersInfo.size() == 0)
         {

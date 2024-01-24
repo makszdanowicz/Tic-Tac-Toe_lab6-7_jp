@@ -15,6 +15,8 @@ public class Client {
     private String userToken;
     private String role;
     private String connectedRoomToken;
+    private String oldMap;
+    private String newMap;
 
     public Client(Socket socket,String userToken)
     {
@@ -227,14 +229,23 @@ public class Client {
         }
         if(resultOfCombination == 1)
         {
+            String[][] map = player.getMap(getConnectedRoomToken());
+            showMap(map);
+            System.out.println();
             System.out.println("End of the game. O won!");
         }
         else if(resultOfCombination == 5)
         {
+            String[][] map = player.getMap(getConnectedRoomToken());
+            showMap(map);
+            System.out.println();
             System.out.println("End of the game. X won!");
         }
         else if(resultOfCombination == 0)
         {
+            String[][] map = player.getMap(getConnectedRoomToken());
+            showMap(map);
+            System.out.println();
             System.out.println("End of the game. It's Draw!");
         }
 
@@ -325,6 +336,8 @@ public class Client {
 
     public void watcherPanel(PlayerFeaturesInterface player,Client client) throws RemoteException {
         Scanner scanner = new Scanner(System.in);
+        System.out.println();
+        System.out.println("{----------------------------------------------------------------}");
         System.out.println("You can connect and view a game between 2 players in chosen room");
         System.out.println("If you want to see the list of game rooms  to connect one of them type '1':");
         System.out.println("If you want to close the program type '0' :");
@@ -338,17 +351,6 @@ public class Client {
             {
                 System.out.println(room);
             }
-//        while(gameRoomsList.size() == 1) //<-----
-//        {
-//            System.out.println("You have to wait, because players don't create any room");
-//            System.out.println("Would you like to wait(type 'w') or you want to disconnect from program(type 'd'):");
-//            String answer = scanner.nextLine();
-//            if(answer.equals("d"))
-//            {
-//                break;
-//            }
-//            gameRoomsList = player.showRooms();
-//        }
             if(gameRoomsList.size() != 0)
             {
                 System.out.println("Provide a token of Game room that u want to view( or if no rooms created yet type anything else to update info):");
@@ -375,6 +377,8 @@ public class Client {
                     try {
                         while (true)
                         {
+
+
                             String[] players = client.sendWatcherMessage("getPlayersInfo",roomToken).split(",");
                             String map = client.sendWatcherMessage("getMap",roomToken);
                             String currentPlayerTurn = client.sendWatcherMessage("getCurrentPlayerTurn",roomToken);
@@ -392,19 +396,28 @@ public class Client {
                             //String checkCombinationO = client.sendWatcherMessage("CheckCombinationO",roomToken);
 
                             System.out.println("Status of game : " + checkCombinationX);
+                            System.out.println();
+                            System.out.println();
+                            System.out.println();
                             if(!checkCombinationX.equals("Players have next moves!"))
                             {
-                                System.out.println("If you want to go to watcher menu again(type '1') or if u want to exit type anything else: ");
-                                String choice = scanner.nextLine();
-                                if(choice.contains("1"))
+                                System.out.println("You have been kicked to menu, because game is over!");
+                                watcherPanel(player,client);
+                            }
+                            String turn = currentPlayerTurn;
+                            while(turn.equals(currentPlayerTurn))
+                            {
+                                turn = client.sendWatcherMessage("getCurrentPlayerTurn",roomToken);
+                                String checkCombination = client.sendWatcherMessage("checkCombinationX",roomToken);
+                                if(!checkCombination.equals("Players have next moves!"))
                                 {
+                                    String endMap = client.sendWatcherMessage("getMap",roomToken);
+                                    System.out.println(endMap.replaceAll("\\*","\n"));
+                                    System.out.println("Status of game : " + checkCombination);
+                                    System.out.println("You have been kicked to menu, because game is over!");
                                     watcherPanel(player,client);
                                 }
-                                else {
-                                    System.exit(0);
-                                }
                             }
-
                         }
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -420,6 +433,7 @@ public class Client {
             if(answer.equals("exit"))
             {
                 client.closeEverything(socket,bufferedReader,bufferedWriter);
+                System.exit(0);
             }
             else {
                 watcherPanel(player,client);
@@ -427,7 +441,17 @@ public class Client {
         }
     }
 
-
+    public boolean checkActualizationOfMap(String map)
+    {
+       if(!oldMap.equals(map))
+       {
+           return false;
+       }
+       else {
+           this.oldMap = map;
+           return true;
+       }
+    }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter)
     {

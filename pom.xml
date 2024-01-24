@@ -31,6 +31,7 @@
                             <classifier>server</classifier>
                             <includes>
                                 <include>com/pwr/server/**</include>
+                                <include>com/pwr/common/**</include>
                             </includes>
                             <finalName>Server</finalName>
                         </configuration>
@@ -45,6 +46,7 @@
                             <classifier>client</classifier>
                             <includes>
                                 <include>com/pwr/client/**</include>
+                                <include>com/pwr/common/**</include>
                             </includes>
                         <finalName>Client</finalName>
                         </configuration>
