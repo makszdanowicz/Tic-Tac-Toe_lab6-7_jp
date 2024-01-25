@@ -139,38 +139,8 @@ public class ClientHandler implements Runnable{
     }
 
 
-    /*
-    public void broadcastMessage(String message)
-    {
-        for(com.pwr.client.ClientHandler clientHandler: clientHandlers)
-        {
-            try{
-                if(!clientHandler.clientUserName.equals(clientUserName))
-                {
-                    clientHandler.bufferedWriter.write(message);
-                    clientHandler.bufferedWriter.flush();
-                }
-            }
-            catch (IOException e)
-            {
-                closeEverything(socket, bufferedReader, bufferedWriter);
-            }
-        }
-    }
-
-
-
-    public void removeClientHandler()
-    {
-        clientHandlers.remove(this);
-        broadcastMessage("SERVER: " + clientUserName + " has left the group session");
-    }
-
-     */
-
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter)
     {
-        //removeClientHandler();
         try{
             if(bufferedReader != null)
             {

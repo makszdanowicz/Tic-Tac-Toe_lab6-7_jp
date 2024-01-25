@@ -13,10 +13,8 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String userToken;
-    private String role;
     private String connectedRoomToken;
     private String oldMap;
-    private String newMap;
 
     public Client(Socket socket,String userToken)
     {
@@ -282,8 +280,6 @@ public class Client {
             System.out.println("The position № " + number + " now is " + figure);
             System.out.println();
         }
-        //SETTURNSTATUS -> FALSE
-        //SETOPPONNENT -> TRUE
     }
 
     private void showMap(String[][] map)
@@ -339,7 +335,7 @@ public class Client {
         System.out.println();
         System.out.println("{----------------------------------------------------------------}");
         System.out.println("You can connect and view a game between 2 players in chosen room");
-        System.out.println("If you want to see the list of game rooms  to connect one of them type '1':");
+        System.out.println("If you want to see the list of game rooms  to connect to one of them type '1':");
         System.out.println("If you want to close the program type '0' :");
         String result = scanner.nextLine();
         if(result.equals("1"))
@@ -377,11 +373,9 @@ public class Client {
                     try {
                         while (true)
                         {
-
-
                             String[] players = client.sendWatcherMessage("getPlayersInfo",roomToken).split(",");
-                            String map = client.sendWatcherMessage("getMap",roomToken);
                             String currentPlayerTurn = client.sendWatcherMessage("getCurrentPlayerTurn",roomToken);
+                            String map = client.sendWatcherMessage("getMap",roomToken);
 
                             System.out.println("-----------------------------------------------");
                             System.out.println("                ROOM " + roomToken.substring(roomToken.indexOf("@")+1).toUpperCase());
@@ -393,7 +387,6 @@ public class Client {
                             System.out.println();
 
                             String checkCombinationX = client.sendWatcherMessage("checkCombinationX",roomToken);
-                            //String checkCombinationO = client.sendWatcherMessage("CheckCombinationO",roomToken);
 
                             System.out.println("Status of game : " + checkCombinationX);
                             System.out.println();
@@ -439,18 +432,6 @@ public class Client {
                 watcherPanel(player,client);
             }
         }
-    }
-
-    public boolean checkActualizationOfMap(String map)
-    {
-       if(!oldMap.equals(map))
-       {
-           return false;
-       }
-       else {
-           this.oldMap = map;
-           return true;
-       }
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter)

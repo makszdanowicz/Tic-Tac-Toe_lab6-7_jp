@@ -1,9 +1,7 @@
 package com.pwr.server;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class GameRoom {
     private String name;
@@ -107,11 +105,6 @@ public class GameRoom {
         return game.getMap();
     }
 
-    public void turnStatus(String playerToken)
-    {
-
-    }
-
     public int makeMove(String playerToken, String playerFigure, int moveNumber)
     {
         System.out.println("Now turn has: " + getTokenOfTurnPlayer());
@@ -159,7 +152,6 @@ public class GameRoom {
     public int restart(String playerToken)
     {
         playersInfo.remove(playerToken);
-        //tokenOfTurnPlayer = null;
         System.out.println("Kicked " + playerToken.substring(playerToken.indexOf("@")+1) + " from room - " + getName());
         if(playersInfo.size() == 0)
         {
